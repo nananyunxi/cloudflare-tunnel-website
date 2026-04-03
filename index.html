@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cloudflare Tunnel 优化版 - 免费内网穿透工具</title>
+    <meta name="description" content="完全免费的内网穿透解决方案，支持自定义域名，无需公网IP，企业级安全保障">
+    <meta name="keywords" content="内网穿透,Cloudflare Tunnel,免费,自定义域名,ngrok替代">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 15px 30px;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1em;
+            opacity: 0.95;
+            margin-bottom: 20px;
+        }
+        
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+        
+        main {
+            background: white;
+            padding: 25px 15px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        
+        section {
+            margin: 25px 0;
+        }
+        
+        section h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        /* 介绍卡片 */
+        .intro-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .intro-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .intro-card p {
+            color: #555;
+            font-size: 0.95em;
+        }
+        
+        /* 特性网格 */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+        
+        .feature-card p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+        
+        /* 优化说明 */
+        .optimizations {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .opt-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .opt-item h4 {
+            color: #28a745;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        
+        .opt-item p {
+            color: #555;
+            font-size: 0.9em;
+        }
+        
+        /* 系统标签 */
+        .system-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .system-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .system-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .system-content {
+            display: none;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .system-content.active {
+            display: block;
+        }
+        
+        .system-content h4 {
+            margin-bottom: 12px;
+            color: #333;
+        }
+        
+        /* 代码块 */
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 12px 0;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 0.8em;
+            line-height: 1.5;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        
+        code {
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+        
+        .comment { color: #75715e; }
+        .cmd { color: #66d9ef; }
+        
+        /* 步骤 */
+        .steps {
+            margin: 15px 0;
+        }
+        
+        .step {
+            margin: 12px 0;
+            padding-left: 10px;
+        }
+        
+        .step-num {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            margin-right: 8px;
+        }
+        
+        .step h5 {
+            display: inline;
+            font-size: 0.95em;
+            color: #333;
+        }
+        
+        /* 表格 */
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            min-width: 500px;
+            border-collapse: collapse;
+            font-size: 0.85em;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .check { color: #28a745; }
+        .cross { color: #dc3545; }
+        .warn { color: #f39c12; }
+        
+        /* FAQ */
+        .faq-item {
+            background: #f8f9fa;
+            margin: 10px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .faq-q {
+            padding: 12px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .faq-a {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        
+        .faq-item.open .faq-a {
+            padding: 15px;
+            max-height: 300px;
+        }
+        
+        .arrow {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.open .arrow {
+            transform: rotate(180deg);
+        }
+        
+        /* CTA */
+        .cta {
+            text-align: center;
+            margin: 30px 0;
+            padding: 25px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .cta h2 {
+            border: none;
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+        
+        .btn-o {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px 15px;
+            color: white;
+            font-size: 0.9em;
+        }
+        
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        /* PC 响应式 */
+        @media (min-width: 769px) {
+            .container { max-width: 1000px; padding: 20px; }
+            header { padding: 50px 20px 40px; }
+            .logo { font-size: 3em; }
+            h1 { font-size: 2.2em; }
+            main { border-radius: 20px; padding: 40px; margin: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+            .features { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .optimizations { grid-template-columns: repeat(2, 1fr); }
+            table { min-width: auto; }
+            pre { font-size: 0.85em; }
+        }
+        
+        @media (min-width: 1024px) {
+            .features { grid-template-columns: repeat(4, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🚀</div>
+            <h1>Cloudflare Tunnel 优化版</h1>
+            <p class="subtitle">免费内网穿透 · 自定义域名 · 企业级安全</p>
+            <div class="badges">
+                <span class="badge">✓ 完全免费</span>
+                <span class="badge">✓ 无需公网IP</span>
+                <span class="badge">✓ 自定义域名</span>
+                <span class="badge">✓ 企业级安全</span>
+            </div>
+        </header>
+        
+        <main>
+            <!-- 项目介绍 -->
+            <section>
+                <h2>📖 项目介绍</h2>
+                <div class="intro-card">
+                    <h3>什么是 Cloudflare Tunnel 优化版？</h3>
+                    <p>本项目是对 Cloudflare 官方工具 <strong>cloudflared</strong> 的优化封装，通过跨平台一键脚本、智能连接优化、完善的配置模板，让用户以最简单的方式享受企业级内网穿透服务。</p>
+                </div>
+                <div class="intro-card">
+                    <h3>为什么选择本项目？</h3>
+                    <p>官方工具功能强大但使用门槛较高，需要手动下载安装、记忆命令参数。本项目提供<strong>一键安装启动脚本</strong>，自动检测系统、安装依赖、引导配置，让新手也能快速上手。</p>
+                </div>
+            </section>
+            
+            <!-- 核心特性 -->
+            <section>
+                <h2>✨ 核心特性</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3>完全免费</h3>
+                        <p>无时长限制、无流量限制、无限隧道数量</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h3>自定义域名</h3>
+                        <p>绑定自己的域名，自动配置 HTTPS</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>企业级安全</h3>
+                        <p>DDoS 防护、WAF 防火墙、TLS 加密</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>智能优化</h3>
+                        <p>IPv4/IPv6 兼容、自动重连、故障转移</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 优化说明 -->
+            <section>
+                <h2>🔧 优化说明</h2>
+                <div class="optimizations">
+                    <div class="opt-item">
+                        <h4>📦 一键安装启动脚本</h4>
+                        <p>跨平台支持 macOS/Linux/Windows，自动检测系统架构，自动安装 cloudflared，交互式引导配置，后台运行支持。</p>
+                    </div>
+                    <div class="opt-item">
+                        <h4>🌐 IPv4/IPv6 智能兼容</h4>
+                        <p>使用 --edge-ip-version auto 参数，自动检测网络环境，选择最优连接方式，解决部分环境连接失败问题。</p>
+                    </div>
+                    <div class="opt-item">
+                        <h4>🔄 连接稳定性增强</h4>
+                        <p>连接重试 5 次、超时 30 秒、TCP 保活 30 秒、HTTP/2 支持，确保隧道稳定运行。</p>
+                    </div>
+                    <div class="opt-item">
+                        <h4>📊 状态检查与更新</h4>
+                        <p>提供状态检查脚本查看运行状态，更新检查脚本自动检测并安装新版本。</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 不同系统使用说明 -->
+            <section>
+                <h2>💻 不同系统使用说明</h2>
+                <div class="system-tabs">
+                    <button class="system-btn active" onclick="showSystem('macos')">macOS</button>
+                    <button class="system-btn" onclick="showSystem('linux')">Linux</button>
+                    <button class="system-btn" onclick="showSystem('windows')">Windows</button>
+                </div>
+                
+                <!-- macOS -->
+                <div id="macos" class="system-content active">
+                    <h4>🍎 macOS 使用说明</h4>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-num">1</span>
+                            <h5>克隆项目</h5>
+                            <pre><span class="cmd">git clone</span> https://github.com/nananyunxi/cloudflare-tunnel-optimized.git
+<span class="cmd">cd</span> cloudflare-tunnel-optimized</pre>
+                        </div>
+                        <div class="step">
+                            <span class="step-num">2</span>
+                            <h5>启动快速隧道</h5>
+                            <pre><span class="comment"># 暴露本地 8080 端口</span>
+<span class="cmd">./scripts/start-quick.sh</span> 8080</pre>
+                        </div>
+                        <div class="step">
+                            <span class="step-num">3</span>
+                            <h5>管理命令</h5>
+                            <pre><span class="cmd">./scripts/status.sh</span>   <span class="comment"># 查看状态</span>
+<span class="cmd">./scripts/stop.sh</span>     <span class="comment"># 停止隧道</span>
+<span class="cmd">./scripts/update.sh</span>   <span class="comment"># 检查更新</span></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Linux -->
+                <div id="linux" class="system-content">
+                    <h4>🐧 Linux 使用说明</h4>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-num">1</span>
+                            <h5>克隆项目</h5>
+                            <pre><span class="cmd">git clone</span> https://github.com/nananyunxi/cloudflare-tunnel-optimized.git
+<span class="cmd">cd</span> cloudflare-tunnel-optimized</pre>
+                        </div>
+                        <div class="step">
+                            <span class="step-num">2</span>
+                            <h5>启动快速隧道</h5>
+                            <pre><span class="comment"># 暴露本地 8080 端口</span>
+<span class="cmd">./scripts/start-quick.sh</span> 8080</pre>
+                        </div>
+                        <div class="step">
+                            <span class="step-num">3</span>
+                            <h5>设置开机自启 (可选)</h5>
+                            <pre><span class="cmd">sudo cloudflared service install</span>
+<span class="cmd">sudo systemctl enable cloudflared</span>
+<span class="cmd">sudo systemctl start cloudflared</span></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Windows -->
+                <div id="windows" class="system-content">
+                    <h4>🪟 Windows 使用说明</h4>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-num">1</span>
+                            <h5>克隆项目</h5>
+                            <pre><span class="cmd">git clone</span> https://github.com/nananyunxi/cloudflare-tunnel-optimized.git
+<span class="cmd">cd</span> cloudflare-tunnel-optimized</pre>
+                        </div>
+                        <div class="step">
+                            <span class="step-num">2</span>
+                            <h5>启动快速隧道</h5>
+                            <pre><span class="comment"># 暴露本地 8080 端口</span>
+<span class="cmd">.\scripts\start-quick.bat</span> 8080</pre>
+                        </div>
+                        <div class="step">
+                            <span class="step-num">3</span>
+                            <h5>管理命令</h5>
+                            <pre><span class="cmd">.\scripts\status.bat</span>   <span class="comment"># 查看状态</span>
+<span class="cmd">.\scripts\stop.bat</span>     <span class="comment"># 停止隧道</span>
+<span class="cmd">.\scripts\update.bat</span>   <span class="comment"># 检查更新</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 方案对比 -->
+            <section>
+                <h2>📊 方案对比</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>对比项</th>
+                                <th>本方案</th>
+                                <th>ngrok</th>
+                                <th>frp</th>
+                                <th>tunnelto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>免费使用</td>
+                                <td class="check">✓ 完全免费</td>
+                                <td class="warn">⚠ 有限制</td>
+                                <td class="check">✓ 免费</td>
+                                <td class="warn">⚠ 试用短</td>
+                            </tr>
+                            <tr>
+                                <td>自定义域名</td>
+                                <td class="check">✓ 免费支持</td>
+                                <td class="cross">✗ 需付费</td>
+                                <td class="check">✓ 支持</td>
+                                <td class="cross">✗ 需付费</td>
+                            </tr>
+                            <tr>
+                                <td>DDoS 防护</td>
+                                <td class="check">✓ 自带</td>
+                                <td class="cross">✗ 无</td>
+                                <td class="cross">✗ 无</td>
+                                <td class="cross">✗ 无</td>
+                            </tr>
+                            <tr>
+                                <td>需要服务器</td>
+                                <td class="check">✓ 不需要</td>
+                                <td class="check">✓ 不需要</td>
+                                <td class="cross">✗ 需要</td>
+                                <td class="check">✓ 不需要</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- FAQ -->
+            <section>
+                <h2>❓ 常见问题</h2>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        <span>快速隧道的域名会变吗？</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="faq-a">
+                        <p>是的，Quick Tunnel 生成的域名是临时的。如需固定域名，请使用命名隧道或自定义域名模式。</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        <span>免费版本有什么限制？</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="faq-a">
+                        <p>✓ 无限隧道数量 ✓ 无限流量 ✓ 支持自定义域名 ✓ DDoS 防护。仅 Zero Trust 用户数限制 50 人。</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        <span>如何绑定自定义域名？</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="faq-a">
+                        <p>1. 将域名添加到 Cloudflare 并修改 NS 服务器<br>2. 运行 <code>cloudflared tunnel login</code> 登录<br>3. 运行 <code>cloudflared tunnel create my-tunnel</code> 创建隧道<br>4. 配置 config.yml 并运行</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        <span>支持哪些协议？</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="faq-a">
+                        <p>支持 HTTP/HTTPS、SSH、RDP、TCP/UDP 等。HTTP 服务可直接使用，SSH/RDP 需配置 Cloudflare Access。</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- CTA -->
+            <section class="cta">
+                <h2>🚀 立即开始使用</h2>
+                <p>完全免费，无需注册</p>
+                <a href="https://github.com/nananyunxi/cloudflare-tunnel-optimized" class="btn" target="_blank">GitHub 仓库</a>
+                <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/" class="btn btn-o" target="_blank">官方文档</a>
+            </section>
+        </main>
+        
+        <footer>
+            <p>
+                <a href="https://github.com/nananyunxi/cloudflare-tunnel-optimized" target="_blank">GitHub</a> · 
+                <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>
+            </p>
+            <p style="margin-top: 10px; opacity: 0.8;">
+                Powered by Cloudflare Tunnel · MIT License
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        function showSystem(id) {
+            document.querySelectorAll('.system-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.system-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function toggleFaq(el) {
+            el.parentElement.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
